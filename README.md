@@ -1,26 +1,5 @@
 # Environment Management (Pixi + uv + Conda)
 
-## For AI Assistants (Claude Code, Codex, etc.)
-
-This directory is located at `~/bin` (`$HOME/bin` or `%USERPROFILE%\bin`).
-
-**Important:** AI assistants run commands in non-interactive shells, which do
-NOT source `.bashrc` or `$PROFILE`. The shell wrapper functions (`new-pixi`,
-`activate-env`, etc.) will NOT be available. Always use full script paths:
-
-| Shell | Create env | Activate env |
-|-------|------------|--------------|
-| Git Bash | `$HOME/bin/setup_new_pixi_env.sh myenv python=3.11` | `source $HOME/bin/activate_env.sh myenv` |
-| PowerShell | `& "$HOME\bin\setup_new_pixi_env.ps1" myenv python=3.11` | `. "$HOME\bin\activate_env.ps1" myenv` |
-| cmd.exe | `%USERPROFILE%\bin\setup_new_pixi_env.bat myenv "python=3.11"` | `%USERPROFILE%\bin\activate_env.bat myenv` |
-
-**Key differences:**
-- cmd.exe requires quoting arguments with `=` (e.g., `"python=3.11"`)
-- Activation in Bash requires `source`, in PowerShell requires leading `.`
-- Pixi is preferred over uv; both are preferred over conda
-
----
-
 ## Commands (for interactive shells)
 
 If the user has sourced `env_functions.ps1` or `env_functions.sh` in their
@@ -160,3 +139,28 @@ run_env.bat myenv python script.py
 - Pixi activation launches a managed subshell
 - uv environments are detected via `Scripts/python.exe`
 - Conda fallback requires conda to be on PATH
+
+---
+
+## For AI Assistants (Claude Code, Codex, etc.)
+
+This directory is located at `~/bin` (`$HOME/bin` or `%USERPROFILE%\bin`).
+
+**Important:** AI assistants run commands in non-interactive shells, which do
+NOT source `.bashrc` or `$PROFILE`. The shell wrapper functions (`new-pixi`,
+`activate-env`, etc.) will NOT be available. Always use full script paths.
+
+### Quick reference
+
+| Shell | Run in env (most common) | Create env | Activate env |
+|-------|--------------------------|------------|--------------|
+| Git Bash | `$HOME/bin/run_env.sh myenv python script.py` | `$HOME/bin/setup_new_pixi_env.sh myenv python=3.11` | `source $HOME/bin/activate_env.sh myenv` |
+| PowerShell | `& "$HOME\bin\run_env.ps1" myenv python script.py` | `& "$HOME\bin\setup_new_pixi_env.ps1" myenv python=3.11` | `. "$HOME\bin\activate_env.ps1" myenv` |
+| cmd.exe | `%USERPROFILE%\bin\run_env.bat myenv python script.py` | `%USERPROFILE%\bin\setup_new_pixi_env.bat myenv "python=3.11"` | `%USERPROFILE%\bin\activate_env.bat myenv` |
+
+### Key differences
+
+- cmd.exe requires quoting arguments with `=` (e.g., `"python=3.11"`)
+- Activation in Bash requires `source`, in PowerShell requires leading `.`
+- Pixi is preferred over uv; both are preferred over conda
+- For Pixi envs, you can also run directly: `pixi run --manifest-path ~/pixi_projects/myenv/pixi.toml python script.py`
