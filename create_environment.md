@@ -24,6 +24,9 @@
    * [PowerShell](#powershell-1)
    * [cmd.exe](#cmdexe-1)
    * [Git Bash](#git-bash-1)
+- [Adding packages to existing environments](#adding-packages-to-existing-environments)
+   * [Pixi](#pixi)
+   * [uv](#uv)
 - [Important note about uv package syntax](#important-note-about-uv-package-syntax)
 - [Important note about package names](#important-note-about-package-names)
 - [What the scripts do](#what-the-scripts-do)
@@ -40,8 +43,6 @@
    * [Pixi on Windows ARM](#pixi-on-windows-arm)
    * [uv on Windows ARM](#uv-on-windows-arm)
 - [After setup](#after-setup)
-   * [Pixi](#pixi-1)
-   * [uv](#uv-1)
 - [VS Code](#vs-code)
    * [Pixi](#pixi-2)
    * [uv](#uv-2)
@@ -336,6 +337,69 @@ Force x64:
 
 ```bash
 ./setup_new_uv_env.sh python_311_pd15 x64 python=3.11 pandas=1.5.3
+```
+
+---
+
+# Adding packages to existing environments
+
+## Pixi
+
+If the environment is already activated:
+
+```
+pixi add numpy scipy
+pixi add numpy=1.26 scipy
+pixi add conda-forge::some-package
+```
+
+If not activated, navigate to the project directory first:
+
+```bash
+# Git Bash
+cd ~/pixi_projects/myenv
+pixi add numpy scipy
+```
+
+```powershell
+# PowerShell
+cd $HOME\pixi_projects\myenv
+pixi add numpy scipy
+```
+
+```cmd
+:: cmd.exe (quote version specs)
+cd %USERPROFILE%\pixi_projects\myenv
+pixi add "numpy=1.26" scipy
+```
+
+## uv
+
+Activate the environment first, then use `uv pip install`:
+
+```
+activate-env myenv
+uv pip install numpy scipy
+```
+
+If the shell functions are not sourced, use the scripts directly:
+
+```bash
+# Git Bash
+source $HOME/bin/activate_env.sh myenv
+uv pip install numpy scipy
+```
+
+```powershell
+# PowerShell
+. "$HOME\bin\activate_env.ps1" myenv
+uv pip install numpy scipy
+```
+
+```cmd
+:: cmd.exe
+%USERPROFILE%\bin\activate_env.bat myenv
+uv pip install numpy scipy
 ```
 
 ---
