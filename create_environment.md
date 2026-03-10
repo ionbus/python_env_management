@@ -481,30 +481,7 @@ This often works better than Pixi on Windows ARM for Python-version availability
 
 # After setup
 
-## Pixi
-
-Activate:
-```powershell
-cd $HOME\pixi_projects\python_311_pd15
-pixi shell
-```
-
-Run without activation:
-```powershell
-pixi run --manifest-path "$HOME\pixi_projects\python_311_pd15\pixi.toml" python script.py
-```
-
-## uv
-
-Activate:
-```powershell
-& "$HOME\uv_envs\arm64\python_311_pd15\Scripts\Activate.ps1"
-```
-
-Run without activation:
-```powershell
-& "$HOME\uv_envs\arm64\python_311_pd15\Scripts\python.exe" script.py
-```
+See [README.md](README.md) for activation and usage instructions across all shells.
 
 ---
 
