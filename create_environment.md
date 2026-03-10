@@ -59,7 +59,7 @@
 These scripts let you create new **Pixi** or **uv** environments using a command pattern that is closer to:
 
 ```bash
-conda create -n ENV_NAME python=3.9 pandas=1.5.3 ...
+conda create -n ENV_NAME python=3.11 pandas=1.5.3 ...
 ```
 
 They assume this layout under your Windows home directory:
@@ -261,43 +261,45 @@ You can override this explicitly by passing `x64` or `arm64` as the second argum
 ## PowerShell
 
 ```powershell
-.\setup_new_pixi_env.ps1 python_39_pd15 python=3.9 pandas=1.5.3  ipython jupyter matplotlib plotly openpyxl duckdb=1 pyarrow-all=16 polars=1.26 cryptography backports.strenum
+.\setup_new_pixi_env.ps1 python_311_pd15 python=3.11 pandas=1.5.3  ipython jupyter matplotlib plotly openpyxl duckdb=1 pyarrow-all=16 polars=1.26 cryptography backports.strenum
 ```
 
 Force x64:
 
 ```powershell
-.\setup_new_pixi_env.ps1 python_39_pd15 x64 python=3.9 pandas=1.5.3 ipython jupyter matplotlib
+.\setup_new_pixi_env.ps1 python_311_pd15 x64 python=3.11 pandas=1.5.3 ipython jupyter matplotlib
 ```
 
 Force arm64:
 
 ```powershell
-.\setup_new_pixi_env.ps1 python_39_pd15 arm64 python=3.9 pandas=1.5.3
+.\setup_new_pixi_env.ps1 python_311_pd15 arm64 python=3.11 pandas=1.5.3
 ```
 
 ## cmd.exe
 
+**Note:** In cmd.exe, arguments containing `=` must be quoted because `=` is treated as an argument separator.
+
 ```cmd
-setup_new_pixi_env.bat python_39_pd15 python=3.9 pandas=1.5.3  ipython jupyter matplotlib plotly openpyxl duckdb=1 pyarrow-all=16 polars=1.26 cryptography backports.strenum
+setup_new_pixi_env.bat python_311_pd15 "python=3.11" "pandas=1.5.3" ipython jupyter matplotlib plotly openpyxl "duckdb=1" "pyarrow-all=16" "polars=1.26" cryptography backports.strenum
 ```
 
 Force x64:
 
 ```cmd
-setup_new_pixi_env.bat python_39_pd15 x64 python=3.9 pandas=1.5.3 ipython jupyter matplotlib
+setup_new_pixi_env.bat python_311_pd15 x64 "python=3.11" "pandas=1.5.3" ipython jupyter matplotlib
 ```
 
 ## Git Bash
 
 ```bash
-./setup_new_pixi_env.sh python_39_pd15 python=3.9 pandas=1.5.3  ipython jupyter matplotlib plotly openpyxl duckdb=1 pyarrow-all polars cryptography backports.strenum
+./setup_new_pixi_env.sh python_311_pd15 python=3.11 pandas=1.5.3  ipython jupyter matplotlib plotly openpyxl duckdb=1 pyarrow-all polars cryptography backports.strenum
 ```
 
 Force arm64:
 
 ```bash
-./setup_new_pixi_env.sh python_39_pd15 arm64 python=3.9 pandas=1.5.3
+./setup_new_pixi_env.sh python_311_pd15 arm64 python=3.11 pandas=1.5.3
 ```
 
 ---
@@ -307,31 +309,33 @@ Force arm64:
 ## PowerShell
 
 ```powershell
-.\setup_new_uv_env.ps1 python_39_pd15 python=3.9 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 pyarrow=16 polars=1.26 cryptography
+.\setup_new_uv_env.ps1 python_311_pd15 python=3.11 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 pyarrow=16 polars=1.26 cryptography
 ```
 
 Force arm64:
 
 ```powershell
-.\setup_new_uv_env.ps1 python_39_pd15 arm64 python=3.9 pandas=1.5.3 ipython jupyter
+.\setup_new_uv_env.ps1 python_311_pd15 arm64 python=3.11 pandas=1.5.3 ipython jupyter
 ```
 
 ## cmd.exe
 
+**Note:** In cmd.exe, arguments containing `=` must be quoted because `=` is treated as an argument separator.
+
 ```cmd
-setup_new_uv_env.bat python_39_pd15 python=3.9 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 pyarrow=16 polars=1.26 cryptography
+setup_new_uv_env.bat python_311_pd15 "python=3.11" "pandas=1.5.3" ipython jupyter matplotlib plotly openpyxl "duckdb=1" "pyarrow=16" "polars=1.26" cryptography
 ```
 
 ## Git Bash
 
 ```bash
-./setup_new_uv_env.sh python_39_pd15 python=3.9 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 pyarrow=16 polars=1.26 cryptography
+./setup_new_uv_env.sh python_311_pd15 python=3.11 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 pyarrow=16 polars=1.26 cryptography
 ```
 
 Force x64:
 
 ```bash
-./setup_new_uv_env.sh python_39_pd15 x64 python=3.9 pandas=1.5.3
+./setup_new_uv_env.sh python_311_pd15 x64 python=3.11 pandas=1.5.3
 ```
 
 ---
@@ -340,7 +344,7 @@ Force x64:
 
 These uv scripts accept **conda-like** version specs such as:
 
-- `python=3.9`
+- `python=3.11`
 - `pandas=1.5.3`
 - `duckdb=1`
 - `attrs=23.1`
@@ -354,7 +358,7 @@ Examples:
 
 The special case is `python=...`:
 
-- For uv, `python=3.9` is used to choose the interpreter passed to `uv venv --python 3.9`
+- For uv, `python=3.11` is used to choose the interpreter passed to `uv venv --python 3.9`
 - It is **not** passed through to `uv pip install`
 
 ---
@@ -433,19 +437,19 @@ the script makes sure `ipykernel` is available and registers the kernel.
 ## Conda reference
 
 ```bash
-conda create -n python_39_pd15 python=3.9 pandas=1.5.3  ipython jupyter matplotlib plotly openpyxl duckdb=1 pyarrow-all=16 polars=1.26 cryptography backports.strenum
+conda create -n python_311_pd15 python=3.11 pandas=1.5.3  ipython jupyter matplotlib plotly openpyxl duckdb=1 pyarrow-all=16 polars=1.26 cryptography backports.strenum
 ```
 
 ## Closest Pixi equivalent
 
-```bash
-setup_new_pixi_env.bat python_39_pd15 python=3.9 pandas=1.5.3  ipython jupyter matplotlib plotly openpyxl duckdb=1 pyarrow-all=16 polars=1.26 cryptography backports.strenum
+```cmd
+setup_new_pixi_env.bat python_311_pd15 "python=3.11" "pandas=1.5.3" ipython jupyter matplotlib plotly openpyxl "duckdb=1" "pyarrow-all=16" "polars=1.26" cryptography backports.strenum
 ```
 
 ## Closest uv equivalent
 
-```bash
-setup_new_uv_env.bat python_39_pd15 python=3.9 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 pyarrow=16 polars=1.26 cryptography
+```cmd
+setup_new_uv_env.bat python_311_pd15 "python=3.11" "pandas=1.5.3" ipython jupyter matplotlib plotly openpyxl "duckdb=1" "pyarrow=16" "polars=1.26" cryptography
 ```
 
 ---
@@ -464,7 +468,7 @@ If a Pixi ARM64 solve fails, retry with:
 Example:
 
 ```powershell
-.\setup_new_pixi_env.ps1 python_39_pd15 x64 python=3.9 pandas=1.5.3
+.\setup_new_pixi_env.ps1 python_311_pd15 x64 python=3.11 pandas=1.5.3
 ```
 
 ## uv on Windows ARM
@@ -481,25 +485,25 @@ This often works better than Pixi on Windows ARM for Python-version availability
 
 Activate:
 ```powershell
-cd $HOME\pixi_projects\python_39_pd15
+cd $HOME\pixi_projects\python_311_pd15
 pixi shell
 ```
 
 Run without activation:
 ```powershell
-pixi run --manifest-path "$HOME\pixi_projects\python_39_pd15\pixi.toml" python script.py
+pixi run --manifest-path "$HOME\pixi_projects\python_311_pd15\pixi.toml" python script.py
 ```
 
 ## uv
 
 Activate:
 ```powershell
-& "$HOME\uv_envs\arm64\python_39_pd15\Scripts\Activate.ps1"
+& "$HOME\uv_envs\arm64\python_311_pd15\Scripts\Activate.ps1"
 ```
 
 Run without activation:
 ```powershell
-& "$HOME\uv_envs\arm64\python_39_pd15\Scripts\python.exe" script.py
+& "$HOME\uv_envs\arm64\python_311_pd15\Scripts\python.exe" script.py
 ```
 
 ---
@@ -543,4 +547,12 @@ That often means:
 Retry with:
 ```powershell
 .\setup_new_pixi_env.ps1 myenv x64 python=...
+```
+
+## cmd.exe splits arguments at `=`
+In cmd.exe, `=` is treated as an argument separator. This means `python=3.11` becomes two separate arguments: `python` and `3.9`.
+
+Solution: Quote any argument containing `=`:
+```cmd
+setup_new_pixi_env.bat myenv "python=3.11" "pandas=1.5.3" ipython
 ```
