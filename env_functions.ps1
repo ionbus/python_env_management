@@ -1,8 +1,13 @@
 # Environment management functions for PowerShell
 # Source this file from your PowerShell profile ($PROFILE):
-#   . "$HOME\bin\env_functions.ps1"
+#   . "$HOME\bin\python_env_management\env_functions.ps1"
 
 $script:BinDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+# Add to PATH if not already present
+if ($env:PATH -notlike "*$script:BinDir*") {
+    $env:PATH = "$script:BinDir;$env:PATH"
+}
 
 function activate-env {
     <#

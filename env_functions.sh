@@ -1,8 +1,14 @@
 # Environment management functions for Bash/Zsh
 # Source this file from your shell profile (~/.bashrc or ~/.zshrc):
-#   source "$HOME/bin/env_functions.sh"
+#   source "$HOME/bin/python_env_management/env_functions.sh"
 
 _ENV_BIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Add to PATH if not already present
+case ":$PATH:" in
+    *":$_ENV_BIN_DIR:"*) ;;
+    *) export PATH="$_ENV_BIN_DIR:$PATH" ;;
+esac
 
 activate-env() {
     # Activate a Pixi, uv, or conda environment by name.

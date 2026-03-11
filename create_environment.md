@@ -145,19 +145,19 @@ If the shell functions are not sourced, use the scripts directly:
 
 ```bash
 # Git Bash
-source $HOME/bin/activate_env.sh myenv
+source $HOME/bin/python_env_management/activate_env.sh myenv
 uv pip install numpy scipy
 ```
 
 ```powershell
 # PowerShell
-. "$HOME\bin\activate_env.ps1" myenv
+. "$HOME\bin\python_env_management\activate_env.ps1" myenv
 uv pip install numpy scipy
 ```
 
 ```cmd
 :: cmd.exe
-%USERPROFILE%\bin\activate_env.bat myenv
+%USERPROFILE%\bin\python_env_management\activate_env.bat myenv
 uv pip install numpy scipy
 ```
 

@@ -66,7 +66,7 @@ The commands above require sourcing the function files in your shell profile.
 Add to your profile (`$PROFILE`):
 
 ```powershell
-. "$HOME\bin\env_functions.ps1"
+. "$HOME\bin\python_env_management\env_functions.ps1"
 ```
 
 ### Bash / Zsh
@@ -74,14 +74,13 @@ Add to your profile (`$PROFILE`):
 Add to `~/.bashrc` or `~/.zshrc`:
 
 ```bash
-source "$HOME/bin/env_functions.sh"
+source "$HOME/bin/python_env_management/env_functions.sh"
 ```
 
 ### Prerequisites
 
-1. Place these scripts in `~/bin` (or `%USERPROFILE%\bin`)
-2. Add that directory to PATH
-3. Source the function file as shown above
+1. Clone or place these scripts in `~/bin/python_env_management`
+2. Source the function file as shown above (this also adds the directory to PATH)
 
 ---
 
@@ -144,7 +143,7 @@ run_env.bat myenv python script.py
 
 ## For AI Assistants (Claude Code, Codex, etc.)
 
-This directory is located at `~/bin` (`$HOME/bin` or `%USERPROFILE%\bin`).
+This directory is located at `~/bin/python_env_management` (`$HOME/bin/python_env_management` or `%USERPROFILE%\bin\python_env_management`).
 
 **Important:** AI assistants run commands in non-interactive shells, which do
 NOT source `.bashrc` or `$PROFILE`. The shell wrapper functions (`new-pixi`,
@@ -154,9 +153,9 @@ NOT source `.bashrc` or `$PROFILE`. The shell wrapper functions (`new-pixi`,
 
 | Shell | Run in env (most common) | Create env | Activate env |
 |-------|--------------------------|------------|--------------|
-| Git Bash | `$HOME/bin/run_env.sh myenv python script.py` | `$HOME/bin/setup_new_pixi_env.sh myenv python=3.11` | `source $HOME/bin/activate_env.sh myenv` |
-| PowerShell | `& "$HOME\bin\run_env.ps1" myenv python script.py` | `& "$HOME\bin\setup_new_pixi_env.ps1" myenv python=3.11` | `. "$HOME\bin\activate_env.ps1" myenv` |
-| cmd.exe | `%USERPROFILE%\bin\run_env.bat myenv python script.py` | `%USERPROFILE%\bin\setup_new_pixi_env.bat myenv "python=3.11"` | `%USERPROFILE%\bin\activate_env.bat myenv` |
+| Git Bash | `$HOME/bin/python_env_management/run_env.sh myenv python script.py` | `$HOME/bin/python_env_management/setup_new_pixi_env.sh myenv python=3.11` | `source $HOME/bin/python_env_management/activate_env.sh myenv` |
+| PowerShell | `& "$HOME\bin\python_env_management\run_env.ps1" myenv python script.py` | `& "$HOME\bin\python_env_management\setup_new_pixi_env.ps1" myenv python=3.11` | `. "$HOME\bin\python_env_management\activate_env.ps1" myenv` |
+| cmd.exe | `%USERPROFILE%\bin\python_env_management\run_env.bat myenv python script.py` | `%USERPROFILE%\bin\python_env_management\setup_new_pixi_env.bat myenv "python=3.11"` | `%USERPROFILE%\bin\python_env_management\activate_env.bat myenv` |
 
 ### Key differences
 
