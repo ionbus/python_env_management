@@ -49,6 +49,33 @@ Environments are stored in:
 - Pixi envs: `~/pixi_envs/x64/` or `~/pixi_envs/arm64/`
 - uv envs: `~/uv_envs/x64/<env_name>/` or `~/uv_envs/arm64/<env_name>/`
 
+The `x64` or `arm64` subdirectory is chosen automatically based on your machine. The Pixi platform name embedded in `pixi.toml` also varies by OS:
+
+| Machine | Arch dir | Pixi platform |
+|---------|----------|---------------|
+| Mac Apple Silicon (M1/M2/M3/M4) | `arm64` | `osx-arm64` |
+| Mac Intel | `x64` | `osx-64` |
+| Windows ARM | `arm64` | `win-arm64` |
+| Windows x64 / Intel / AMD | `x64` | `win-64` |
+| Linux ARM64 | `arm64` | `linux-aarch64` |
+| Linux x64 | `x64` | `linux-64` |
+
+### Forcing x64 on ARM machines
+
+On ARM64 machines (Mac Apple Silicon or Windows ARM), you can pass `x64` explicitly to create an x64 environment instead:
+
+```bash
+new-pixi myenv x64 python=3.11 pandas=2.2
+new-uv   myenv x64 python=3.11 pandas=2.2
+```
+
+**When to do this:**
+
+- **Windows ARM** — `win-arm64` conda-forge coverage is still uneven; some packages only have `win-64` builds. If a Pixi solve fails, retry with `x64`.
+- **Mac Apple Silicon** — `osx-arm64` coverage on conda-forge is generally excellent, so this is rarely needed. However, if a package has no native arm64 build, forcing `x64` will use the `osx-64` build instead, which runs transparently under Rosetta 2.
+
+On Intel/x64 machines there is no equivalent fallback — you get the native x64 build.
+
 ---
 
 ## Detailed setup guide
