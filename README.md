@@ -12,7 +12,7 @@ new-pixi myenv python=3.11 pandas=2.2 ipython jupyter
 new-uv myenv python=3.11 pandas=2.2 ipython jupyter
 ```
 
-With explicit architecture:
+With explicit architecture (see [when and why](#forcing-x64-on-arm-machines)):
 
 ```
 new-pixi myenv x64 python=3.11 pandas=2.2
