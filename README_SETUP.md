@@ -4,26 +4,26 @@
 - [Installing Pixi and uv](#installing-pixi-and-uv)
    * [Pixi installation](#pixi-installation)
       + [Windows (PowerShell)](#windows-powershell)
-      + [Linux](#linux)
+      + [Linux / macOS](#linux--macos)
    * [uv installation](#uv-installation)
       + [Windows (PowerShell)](#windows-powershell-1)
-      + [Linux](#linux-1)
+      + [Linux / macOS](#linux--macos-1)
 - [Pixi detached environments](#pixi-detached-environments)
    * [Why use detached environments](#why-use-detached-environments)
    * [How these setup scripts configure detached environments](#how-these-setup-scripts-configure-detached-environments)
    * [Manual detached-environment setup example](#manual-detached-environment-setup-example)
       + [Windows PowerShell](#windows-powershell-2)
-      + [Linux example](#linux-example)
+      + [macOS / Linux](#macos--linux)
    * [What changed in these scripts](#what-changed-in-these-scripts)
 - [Default architecture behavior](#default-architecture-behavior)
 - [Pixi commands](#pixi-commands)
+   * [Bash / Zsh (Mac, Linux, Git Bash)](#bash--zsh-mac-linux-git-bash)
    * [PowerShell](#powershell)
    * [cmd.exe](#cmdexe)
-   * [Git Bash](#git-bash)
 - [uv commands](#uv-commands)
+   * [Bash / Zsh (Mac, Linux, Git Bash)](#bash--zsh-mac-linux-git-bash-1)
    * [PowerShell](#powershell-1)
    * [cmd.exe](#cmdexe-1)
-   * [Git Bash](#git-bash-1)
 - [Important note about uv package syntax](#important-note-about-uv-package-syntax)
 - [Important note about package names](#important-note-about-package-names)
 - [What the scripts do](#what-the-scripts-do)
@@ -39,6 +39,7 @@
 - [Architecture notes](#architecture-notes)
    * [Pixi on Windows ARM](#pixi-on-windows-arm)
    * [uv on Windows ARM](#uv-on-windows-arm)
+   * [Pixi on macOS Apple Silicon](#pixi-on-macos-apple-silicon)
 - [After setup](#after-setup)
    * [Pixi](#pixi-1)
    * [uv](#uv-1)
@@ -47,7 +48,7 @@
    * [uv](#uv-2)
 - [Troubleshooting](#troubleshooting)
    * [PowerShell blocks scripts](#powershell-blocks-scripts)
-   * [Git Bash + Pixi shell](#git-bash-pixi-shell)
+   * [Git Bash + Pixi shell](#git-bash--pixi-shell)
    * [uv package install fails](#uv-package-install-fails)
    * [Pixi solve fails on ARM64](#pixi-solve-fails-on-arm64)
 
@@ -62,23 +63,13 @@ These scripts let you create new **Pixi** or **uv** environments using a command
 conda create -n ENV_NAME python=3.9 pandas=1.5.3 ...
 ```
 
-They assume this layout under your Windows home directory:
+Environments are stored under your home directory (`~` / `$HOME` / `%USERPROFILE%`):
 
-- Pixi projects: `%USERPROFILE%\pixi_projects\`
-- Pixi detached envs:
-  - `%USERPROFILE%\pixi_envs\arm64\`
-  - `%USERPROFILE%\pixi_envs\x64\`
-- uv envs:
-  - `%USERPROFILE%\uv_envs\arm64\`
-  - `%USERPROFILE%\uv_envs\x64\`
+- Pixi projects: `~/pixi_projects/`
+- Pixi detached envs: `~/pixi_envs/arm64/` or `~/pixi_envs/x64/`
+- uv envs: `~/uv_envs/arm64/` or `~/uv_envs/x64/`
 
-Git Bash equivalents:
-
-- `$HOME/pixi_projects`
-- `$HOME/pixi_envs/arm64`
-- `$HOME/pixi_envs/x64`
-- `$HOME/uv_envs/arm64`
-- `$HOME/uv_envs/x64`
+Windows equivalents use `%USERPROFILE%` in place of `~`.
 
 ---
 
@@ -86,15 +77,13 @@ Git Bash equivalents:
 
 ## Pixi installation
 
-Pixi’s official installation docs recommend the standalone installer, and note that rerunning the installer updates Pixi, or you can use `pixi self-update`. citeturn0search0turn0search16
-
 ### Windows (PowerShell)
 
 ```powershell
 powershell -ExecutionPolicy Bypass -c "irm -useb https://pixi.sh/install.ps1 | iex"
 ```
 
-### Linux
+### Linux / macOS
 
 ```bash
 curl -fsSL https://pixi.sh/install.sh | bash
@@ -114,15 +103,13 @@ pixi self-update
 
 ## uv installation
 
-Astral’s official docs recommend the standalone installer on both Windows and Linux. citeturn0search1turn0search3turn0search7
-
 ### Windows (PowerShell)
 
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-### Linux
+### Linux / macOS
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -134,20 +121,20 @@ After installation, verify:
 uv --version
 ```
 
-uv can also install Python on demand, and it can install specific Python versions with `uv python install 3.12`. citeturn0search11
+uv can also install Python on demand with `uv python install 3.12`.
 
 ---
 
 # Pixi detached environments
 
-Pixi’s `detached-environments` setting controls where workspace environments are stored instead of the default `.pixi/envs` folder inside the workspace. Pixi supports this in configuration, including per-project `.pixi/config.toml`. citeturn0search16
+Pixi's `detached-environments` setting controls where workspace environments are stored instead of the default `.pixi/envs` folder inside the workspace. Pixi supports this in configuration, including per-project `.pixi/config.toml`.
 
 ## Why use detached environments
 
 With this layout:
 
-- `pixi_projects\<env_name>\pixi.toml` contains the environment definition
-- `pixi_envs\x64\...` or `pixi_envs\arm64\...` contains the actual installed environment
+- `~/pixi_projects/<env_name>/pixi.toml` contains the environment definition
+- `~/pixi_envs/x64/...` or `~/pixi_envs/arm64/...` contains the actual installed environment
 
 That gives you:
 
@@ -160,24 +147,12 @@ That gives you:
 
 The Pixi setup scripts:
 
-1. Create `%USERPROFILE%\pixi_projects\<EnvName>`
-2. Create `%USERPROFILE%\pixi_envs\x64` or `%USERPROFILE%\pixi_envs\arm64`
-3. Write:
+1. Create `~/pixi_projects/<EnvName>`
+2. Create `~/pixi_envs/x64` or `~/pixi_envs/arm64`
+3. Write the appropriate path to `~/pixi_projects/<EnvName>/.pixi/config.toml`:
 
 ```toml
-detached-environments = "C:\\Users\\<you>\\pixi_envs\\x64"
-```
-
-or
-
-```toml
-detached-environments = "C:\\Users\\<you>\\pixi_envs\\arm64"
-```
-
-to:
-
-```text
-%USERPROFILE%\pixi_projects\<EnvName>\.pixi\config.toml
+detached-environments = "/Users/you/pixi_envs/x64"
 ```
 
 This makes the setting project-specific instead of global.
@@ -204,26 +179,26 @@ pixi add python=3.12 pandas=2.2
 pixi install
 ```
 
-### Linux example
-
-On Linux, the same idea works with Linux paths:
+### macOS / Linux
 
 ```bash
 mkdir -p "$HOME/pixi_projects/myenv"
 cd "$HOME/pixi_projects/myenv"
 
-pixi init --platform linux-64
+# macOS Apple Silicon:
+pixi init --platform osx-arm64
+# macOS Intel:    pixi init --platform osx-64
+# Linux x64:      pixi init --platform linux-64
+# Linux ARM64:    pixi init --platform linux-aarch64
 
 mkdir -p .pixi
 cat > .pixi/config.toml <<EOF
-detached-environments = "$HOME/pixi_envs/x64"
+detached-environments = "$HOME/pixi_envs/arm64"
 EOF
 
 pixi add python=3.12 pandas=2.2
 pixi install
 ```
-
----
 
 ## What changed in these scripts
 
@@ -242,26 +217,42 @@ That means you can run commands similar to conda, instead of using separate `-Py
 
 # Default architecture behavior
 
-If you do not specify an architecture, the scripts choose a default based on the computer:
+If you do not specify an architecture, the scripts detect it automatically:
 
-- On an **ARM64 Windows machine**:
-  - Pixi default platform: `win-arm64`
-  - uv default architecture: `arm64`
+| OS | ARM64 | x64 / Intel |
+|----|-------|-------------|
+| **Windows** | Pixi: `win-arm64`, uv arch: `arm64` | Pixi: `win-64`, uv arch: `x64` |
+| **macOS** | Pixi: `osx-arm64` (Apple Silicon), uv arch: `arm64` | Pixi: `osx-64`, uv arch: `x64` |
+| **Linux** | Pixi: `linux-aarch64`, uv arch: `arm64` | Pixi: `linux-64`, uv arch: `x64` |
 
-- On an **x64 / Intel / AMD Windows machine**:
-  - Pixi default platform: `win-64`
-  - uv default architecture: `x64`
-
-You can override this explicitly by passing `x64` or `arm64` as the second argument.
+You can override by passing `x64` or `arm64` as the second argument.
 
 ---
 
 # Pixi commands
 
+## Bash / Zsh (Mac, Linux, Git Bash)
+
+```bash
+./setup_new_pixi_env.sh python_39_pd15 python=3.9 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 attrs=23.1 pyarrow-all polars=1.26 cryptography backports.strenum
+```
+
+Force x64:
+
+```bash
+./setup_new_pixi_env.sh python_39_pd15 x64 python=3.9 pandas=1.5.3 ipython jupyter matplotlib
+```
+
+Force arm64:
+
+```bash
+./setup_new_pixi_env.sh python_39_pd15 arm64 python=3.9 pandas=1.5.3
+```
+
 ## PowerShell
 
 ```powershell
-.\setup_new_pixi_env.ps1 python_39_pd15 python=3.9 pandas=1.5.3 python-pyranha python-core-utils ipython jupyter matplotlib plotly openpyxl duckdb=1 attrs=23.1 pyarrow-all=16 polars=1.26 cryptography backports.strenum
+.\setup_new_pixi_env.ps1 python_39_pd15 python=3.9 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 attrs=23.1 pyarrow-all=16 polars=1.26 cryptography backports.strenum
 ```
 
 Force x64:
@@ -278,31 +269,39 @@ Force arm64:
 
 ## cmd.exe
 
+**Note:** In cmd.exe, `=` is treated as an argument separator — quote any argument containing `=`.
+
 ```cmd
-setup_new_pixi_env.bat python_39_pd15 python=3.9 pandas=1.5.3 python-pyranha python-core-utils ipython jupyter matplotlib plotly openpyxl duckdb=1 attrs=23.1 pyarrow-all=16 polars=1.26 cryptography backports.strenum
+setup_new_pixi_env.bat python_39_pd15 "python=3.9" "pandas=1.5.3" ipython jupyter matplotlib plotly openpyxl "duckdb=1" "attrs=23.1" "pyarrow-all=16" "polars=1.26" cryptography backports.strenum
 ```
 
 Force x64:
 
 ```cmd
-setup_new_pixi_env.bat python_39_pd15 x64 python=3.9 pandas=1.5.3 ipython jupyter matplotlib
-```
-
-## Git Bash
-
-```bash
-./setup_new_pixi_env.sh python_39_pd15 python=3.9 pandas=1.5.3 python-pyranha python-core-utils ipython jupyter matplotlib plotly openpyxl duckdb=1 attrs=23.1 pyarrow-all=16 polars=1.26 cryptography backports.strenum
-```
-
-Force arm64:
-
-```bash
-./setup_new_pixi_env.sh python_39_pd15 arm64 python=3.9 pandas=1.5.3
+setup_new_pixi_env.bat python_39_pd15 x64 "python=3.9" "pandas=1.5.3" ipython jupyter matplotlib
 ```
 
 ---
 
 # uv commands
+
+## Bash / Zsh (Mac, Linux, Git Bash)
+
+```bash
+./setup_new_uv_env.sh python_39_pd15 python=3.9 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 attrs=23.1 pyarrow=16 polars=1.26 cryptography
+```
+
+Force x64:
+
+```bash
+./setup_new_uv_env.sh python_39_pd15 x64 python=3.9 pandas=1.5.3
+```
+
+Force arm64:
+
+```bash
+./setup_new_uv_env.sh python_39_pd15 arm64 python=3.9 pandas=1.5.3 ipython jupyter
+```
 
 ## PowerShell
 
@@ -318,20 +317,10 @@ Force arm64:
 
 ## cmd.exe
 
+**Note:** In cmd.exe, `=` is treated as an argument separator — quote any argument containing `=`.
+
 ```cmd
-setup_new_uv_env.bat python_39_pd15 python=3.9 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 attrs=23.1 pyarrow=16 polars=1.26 cryptography
-```
-
-## Git Bash
-
-```bash
-./setup_new_uv_env.sh python_39_pd15 python=3.9 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 attrs=23.1 pyarrow=16 polars=1.26 cryptography
-```
-
-Force x64:
-
-```bash
-./setup_new_uv_env.sh python_39_pd15 x64 python=3.9 pandas=1.5.3
+setup_new_uv_env.bat python_39_pd15 "python=3.9" "pandas=1.5.3" ipython jupyter matplotlib plotly openpyxl "duckdb=1" "attrs=23.1" "pyarrow=16" "polars=1.26" cryptography
 ```
 
 ---
@@ -378,23 +367,22 @@ That is expected.
 
 ## Pixi scripts
 
-1. Create `%USERPROFILE%\pixi_projects\<EnvName>`
+1. Create `~/pixi_projects/<EnvName>`
 2. Detect architecture (`auto`) or use the one you specified
-3. Map architecture to Pixi platform:
-   - `x64` → `win-64`
-   - `arm64` → `win-arm64`
+3. Map OS + architecture to Pixi platform:
+   - Windows x64 → `win-64`, Windows arm64 → `win-arm64`
+   - macOS x64 → `osx-64`, macOS arm64 → `osx-arm64`
+   - Linux x64 → `linux-64`, Linux arm64 → `linux-aarch64`
 4. Run `pixi init --platform <platform>` if needed
-5. Create `.pixi\config.toml`
-6. Point detached environments to:
-   - `%USERPROFILE%\pixi_envs\x64`
-   - or `%USERPROFILE%\pixi_envs\arm64`
+5. Create `.pixi/config.toml`
+6. Point detached environments to `~/pixi_envs/x64` or `~/pixi_envs/arm64`
 7. Add all package specs with `pixi add`
 8. Run `pixi install`
 9. If `ipykernel` is present in the package list, register a Jupyter kernel
 
 ## uv scripts
 
-1. Create `%USERPROFILE%\uv_envs\<arch>\<EnvName>`
+1. Create `~/uv_envs/<arch>/<EnvName>`
 2. Detect architecture (`auto`) or use the one you specified
 3. Extract `python=...` if present
 4. Create the venv with `uv venv ... --python ...`
@@ -408,23 +396,14 @@ That is expected.
 
 ## Pixi
 
-If your package list includes:
-
-- `ipykernel`
-
-the script registers a kernel with:
+If your package list includes `ipykernel`, the script registers a kernel with:
 
 - name = environment name
 - display name = environment name
 
 ## uv
 
-If your package list includes either:
-
-- `ipykernel`
-- or `jupyter`
-
-the script makes sure `ipykernel` is available and registers the kernel.
+If your package list includes either `ipykernel` or `jupyter`, the script makes sure `ipykernel` is available and registers the kernel.
 
 ---
 
@@ -433,19 +412,21 @@ the script makes sure `ipykernel` is available and registers the kernel.
 ## Conda reference
 
 ```bash
-conda create -n python_39_pd15 python=3.9 pandas=1.5.3 python-pyranha python-core-utils ipython jupyter matplotlib plotly openpyxl duckdb=1 attrs=23.1 pyarrow-all=16 polars=1.26 cryptography backports.strenum
+conda create -n python_39_pd15 python=3.9 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 attrs=23.1 pyarrow-all=16 polars=1.26 cryptography backports.strenum
 ```
 
 ## Closest Pixi equivalent
 
 ```bash
-setup_new_pixi_env.bat python_39_pd15 python=3.9 pandas=1.5.3 python-pyranha python-core-utils ipython jupyter matplotlib plotly openpyxl duckdb=1 attrs=23.1 pyarrow-all=16 polars=1.26 cryptography backports.strenum
+# Mac / Linux / Git Bash
+./setup_new_pixi_env.sh python_39_pd15 python=3.9 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 attrs=23.1 pyarrow-all polars=1.26 cryptography backports.strenum
 ```
 
 ## Closest uv equivalent
 
 ```bash
-setup_new_uv_env.bat python_39_pd15 python=3.9 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 attrs=23.1 pyarrow=16 polars=1.26 cryptography
+# Mac / Linux / Git Bash
+./setup_new_uv_env.sh python_39_pd15 python=3.9 pandas=1.5.3 ipython jupyter matplotlib plotly openpyxl duckdb=1 attrs=23.1 pyarrow=16 polars=1.26 cryptography
 ```
 
 ---
@@ -456,12 +437,11 @@ setup_new_uv_env.bat python_39_pd15 python=3.9 pandas=1.5.3 ipython jupyter matp
 
 Pixi / conda-forge support for `win-arm64` is still uneven for some packages.
 
-If a Pixi ARM64 solve fails, retry with:
+If a Pixi ARM64 solve fails, retry with `x64`:
 
-- `x64` architecture
-- which maps to `win-64`
-
-Example:
+```bash
+./setup_new_pixi_env.sh myenv x64 python=3.9 pandas=1.5.3
+```
 
 ```powershell
 .\setup_new_pixi_env.ps1 python_39_pd15 x64 python=3.9 pandas=1.5.3
@@ -471,7 +451,17 @@ Example:
 
 uv can usually install native ARM64 CPython and then use PyPI wheels.
 
-This often works better than Pixi on Windows ARM for Python-version availability. citeturn0search11
+This often works better than Pixi on Windows ARM for Python-version availability.
+
+## Pixi on macOS Apple Silicon
+
+conda-forge has excellent `osx-arm64` support. Most packages work natively.
+
+If a solve fails, retry with `x64` to use the `osx-64` build under Rosetta 2:
+
+```bash
+./setup_new_pixi_env.sh myenv x64 python=3.9 pandas=1.5.3
+```
 
 ---
 
@@ -479,26 +469,55 @@ This often works better than Pixi on Windows ARM for Python-version availability
 
 ## Pixi
 
-Activate:
+Activate (any shell):
+
+```bash
+# Mac / Linux / Git Bash
+cd ~/pixi_projects/python_39_pd15
+pixi shell
+```
+
 ```powershell
+# PowerShell
 cd $HOME\pixi_projects\python_39_pd15
 pixi shell
 ```
 
 Run without activation:
+
+```bash
+# Mac / Linux / Git Bash
+pixi run --manifest-path "$HOME/pixi_projects/python_39_pd15/pixi.toml" python script.py
+```
+
 ```powershell
+# PowerShell
 pixi run --manifest-path "$HOME\pixi_projects\python_39_pd15\pixi.toml" python script.py
 ```
 
 ## uv
 
 Activate:
+
+```bash
+# Mac / Linux (bin/activate)
+source "$HOME/uv_envs/arm64/python_39_pd15/bin/activate"
+```
+
 ```powershell
+# PowerShell (Scripts/Activate.ps1)
 & "$HOME\uv_envs\arm64\python_39_pd15\Scripts\Activate.ps1"
 ```
 
 Run without activation:
+
+```bash
+# Mac / Linux
+"$HOME/uv_envs/arm64/python_39_pd15/bin/python" script.py
+```
+
 ```powershell
+# PowerShell
 & "$HOME\uv_envs\arm64\python_39_pd15\Scripts\python.exe" script.py
 ```
 
@@ -514,9 +533,9 @@ Run without activation:
 ## uv
 - Open your code folder
 - `Python: Select Interpreter`
-- Choose:
-  - `%USERPROFILE%\uv_envs\arm64\<env>\Scripts\python.exe`
-  - or `%USERPROFILE%\uv_envs\x64\<env>\Scripts\python.exe`
+- Choose the interpreter for your OS:
+  - **Mac / Linux:** `~/uv_envs/arm64/<env>/bin/python` or `~/uv_envs/x64/<env>/bin/python`
+  - **Windows:** `%USERPROFILE%\uv_envs\arm64\<env>\Scripts\python.exe`
 
 For notebooks, pick the kernel registered by the setup script.
 
@@ -540,7 +559,15 @@ That often means:
 - or that version / wheel does not exist for that platform
 
 ## Pixi solve fails on ARM64
-Retry with:
+
+Retry with `x64`:
+
+```bash
+# Mac / Linux / Git Bash
+./setup_new_pixi_env.sh myenv x64 python=...
+```
+
 ```powershell
+# PowerShell
 .\setup_new_pixi_env.ps1 myenv x64 python=...
 ```

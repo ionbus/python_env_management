@@ -19,6 +19,11 @@ new-pixi myenv x64 python=3.11 pandas=2.2
 new-pixi myenv arm64 python=3.11 pandas=2.2
 ```
 
+> **Windows cmd.exe:** `=` is treated as an argument separator, so any argument containing `=` must be quoted:
+> ```cmd
+> new-pixi myenv "python=3.11" "pandas=2.2" ipython
+> ```
+
 ### Activate an environment
 
 ```
