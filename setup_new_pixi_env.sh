@@ -27,11 +27,15 @@ else
   RESOLVED_ARCH="$ARCH"
 fi
 
-if [[ "$RESOLVED_ARCH" == "arm64" ]]; then
-  PLATFORM="win-arm64"
-else
-  PLATFORM="win-64"
-fi
+OS="$(uname -s)"
+case "$OS" in
+  Darwin)
+    if [[ "$RESOLVED_ARCH" == "arm64" ]]; then PLATFORM="osx-arm64"; else PLATFORM="osx-64"; fi ;;
+  Linux)
+    if [[ "$RESOLVED_ARCH" == "arm64" ]]; then PLATFORM="linux-aarch64"; else PLATFORM="linux-64"; fi ;;
+  *)
+    if [[ "$RESOLVED_ARCH" == "arm64" ]]; then PLATFORM="win-arm64"; else PLATFORM="win-64"; fi ;;
+esac
 
 if [[ $# -lt 1 ]]; then
   echo "No packages provided."

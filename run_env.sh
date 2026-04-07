@@ -22,13 +22,19 @@ fi
 UV_ARM="${UV_ENVS}/arm64/${ENVNAME}"
 UV_X64="${UV_ENVS}/x64/${ENVNAME}"
 
-if [[ -x "${UV_ARM}/Scripts/python.exe" ]]; then
-  VIRTUAL_ENV="$UV_ARM" PATH="${UV_ARM}/Scripts:$PATH" "$@"
+OS="$(uname -s)"
+case "$OS" in
+  Darwin|Linux) PYTHON_REL="bin/python"; SCRIPTS_REL="bin" ;;
+  *)            PYTHON_REL="Scripts/python.exe"; SCRIPTS_REL="Scripts" ;;
+esac
+
+if [[ -x "${UV_ARM}/${PYTHON_REL}" ]]; then
+  VIRTUAL_ENV="$UV_ARM" PATH="${UV_ARM}/${SCRIPTS_REL}:$PATH" "$@"
   exit $?
 fi
 
-if [[ -x "${UV_X64}/Scripts/python.exe" ]]; then
-  VIRTUAL_ENV="$UV_X64" PATH="${UV_X64}/Scripts:$PATH" "$@"
+if [[ -x "${UV_X64}/${PYTHON_REL}" ]]; then
+  VIRTUAL_ENV="$UV_X64" PATH="${UV_X64}/${SCRIPTS_REL}:$PATH" "$@"
   exit $?
 fi
 

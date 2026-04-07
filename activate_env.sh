@@ -22,13 +22,19 @@ fi
 UV_ARM="${UV_ENVS}/arm64/${ENVNAME}"
 UV_X64="${UV_ENVS}/x64/${ENVNAME}"
 
-if [[ -f "${UV_ARM}/Scripts/activate" ]]; then
-  source "${UV_ARM}/Scripts/activate"
+OS="$(uname -s)"
+case "$OS" in
+  Darwin|Linux) SCRIPTS_REL="bin" ;;
+  *)            SCRIPTS_REL="Scripts" ;;
+esac
+
+if [[ -f "${UV_ARM}/${SCRIPTS_REL}/activate" ]]; then
+  source "${UV_ARM}/${SCRIPTS_REL}/activate"
   return 0
 fi
 
-if [[ -f "${UV_X64}/Scripts/activate" ]]; then
-  source "${UV_X64}/Scripts/activate"
+if [[ -f "${UV_X64}/${SCRIPTS_REL}/activate" ]]; then
+  source "${UV_X64}/${SCRIPTS_REL}/activate"
   return 0
 fi
 

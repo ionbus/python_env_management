@@ -84,13 +84,19 @@ BASE="$HOME"
 UV_ENVS="$BASE/uv_envs"
 ENVDIR="$UV_ENVS/$RESOLVED_ARCH/$ENVNAME"
 
+OS="$(uname -s)"
+case "$OS" in
+  Darwin|Linux) PYTHON_REL="bin/python" ;;
+  *)            PYTHON_REL="Scripts/python.exe" ;;
+esac
+
 mkdir -p "$UV_ENVS/$RESOLVED_ARCH"
 
-if [[ ! -x "$ENVDIR/Scripts/python.exe" ]]; then
+if [[ ! -x "$ENVDIR/$PYTHON_REL" ]]; then
   uv venv "$ENVDIR" --python "$PYVER"
 fi
 
-PYTHONEXE="$ENVDIR/Scripts/python.exe"
+PYTHONEXE="$ENVDIR/$PYTHON_REL"
 
 if [[ ${#INSTALL_SPECS[@]} -gt 0 ]]; then
   uv pip install --python "$PYTHONEXE" "${INSTALL_SPECS[@]}"

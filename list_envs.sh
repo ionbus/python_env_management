@@ -10,16 +10,22 @@ for d in "$PIXI_PROJECTS"/*; do
   [[ -f "$d/pixi.toml" ]] && echo "[pixi] $(basename "$d")"
 done
 
+OS="$(uname -s)"
+case "$OS" in
+  Darwin|Linux) PYTHON_REL="bin/python" ;;
+  *)            PYTHON_REL="Scripts/python.exe" ;;
+esac
+
 echo
 echo "uv arm64 Environments:"
 for d in "$UV_ENVS/arm64"/*; do
-  [[ -x "$d/Scripts/python.exe" ]] && echo "[uv-arm64] $(basename "$d")"
+  [[ -x "$d/$PYTHON_REL" ]] && echo "[uv-arm64] $(basename "$d")"
 done
 
 echo
 echo "uv x64 Environments:"
 for d in "$UV_ENVS/x64"/*; do
-  [[ -x "$d/Scripts/python.exe" ]] && echo "[uv-x64] $(basename "$d")"
+  [[ -x "$d/$PYTHON_REL" ]] && echo "[uv-x64] $(basename "$d")"
 done
 
 echo

@@ -136,7 +136,7 @@ run_env.bat myenv python script.py
 ## Notes
 
 - Pixi activation launches a managed subshell
-- uv environments are detected via `Scripts/python.exe`
+- uv environments are detected via `bin/python` (Mac/Linux) or `Scripts/python.exe` (Windows)
 - Conda fallback requires conda to be on PATH
 
 ---

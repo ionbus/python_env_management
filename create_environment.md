@@ -20,6 +20,7 @@
 - [Architecture notes](#architecture-notes)
    * [Pixi on Windows ARM](#pixi-on-windows-arm)
    * [uv on Windows ARM](#uv-on-windows-arm)
+   * [Pixi on macOS (Apple Silicon)](#pixi-on-macos-apple-silicon)
 - [After setup](#after-setup)
 - [VS Code](#vs-code)
    * [Pixi](#pixi-2)
@@ -86,13 +87,11 @@ Git Bash equivalents:
 
 If you do not specify an architecture, the scripts choose a default based on the computer:
 
-- On an **ARM64 Windows machine**:
-  - Pixi default platform: `win-arm64`
-  - uv default architecture: `arm64`
-
-- On an **x64 / Intel / AMD Windows machine**:
-  - Pixi default platform: `win-64`
-  - uv default architecture: `x64`
+| OS | ARM64 | x64 / Intel |
+|----|-------|-------------|
+| **Windows** | Pixi: `win-arm64`, uv arch: `arm64` | Pixi: `win-64`, uv arch: `x64` |
+| **macOS** | Pixi: `osx-arm64` (Apple Silicon), uv arch: `arm64` | Pixi: `osx-64`, uv arch: `x64` |
+| **Linux** | Pixi: `linux-aarch64`, uv arch: `arm64` | Pixi: `linux-64`, uv arch: `x64` |
 
 You can override this explicitly by passing `x64` or `arm64` as the second argument.
 
@@ -207,9 +206,10 @@ That is expected.
 
 1. Create `%USERPROFILE%\pixi_projects\<EnvName>`
 2. Detect architecture (`auto`) or use the one you specified
-3. Map architecture to Pixi platform:
-   - `x64` → `win-64`
-   - `arm64` → `win-arm64`
+3. Map architecture to Pixi platform (based on OS + arch):
+   - Windows x64 → `win-64`, Windows arm64 → `win-arm64`
+   - macOS x64 → `osx-64`, macOS arm64 → `osx-arm64`
+   - Linux x64 → `linux-64`, Linux arm64 → `linux-aarch64`
 4. Run `pixi init --platform <platform>` if needed
 5. Create `.pixi\config.toml`
 6. Point detached environments to:
@@ -298,7 +298,17 @@ Example:
 
 uv can usually install native ARM64 CPython and then use PyPI wheels.
 
-This often works better than Pixi on Windows ARM for Python-version availability. citeturn0search11
+This often works better than Pixi on Windows ARM for Python-version availability.
+
+## Pixi on macOS (Apple Silicon)
+
+conda-forge has excellent `osx-arm64` support. Most packages work natively.
+
+If a solve fails, retry with `x64` to use Rosetta-compatible packages:
+
+```bash
+./setup_new_pixi_env.sh myenv x64 python=3.11 pandas=1.5.3
+```
 
 ---
 
@@ -318,9 +328,9 @@ See [README.md](README.md) for activation and usage instructions across all shel
 ## uv
 - Open your code folder
 - `Python: Select Interpreter`
-- Choose:
-  - `%USERPROFILE%\uv_envs\arm64\<env>\Scripts\python.exe`
-  - or `%USERPROFILE%\uv_envs\x64\<env>\Scripts\python.exe`
+- Choose the interpreter for your OS:
+  - **Windows:** `%USERPROFILE%\uv_envs\arm64\<env>\Scripts\python.exe`
+  - **Mac/Linux:** `~/uv_envs/arm64/<env>/bin/python` or `~/uv_envs/x64/<env>/bin/python`
 
 For notebooks, pick the kernel registered by the setup script.
 
@@ -458,7 +468,7 @@ Pixi's official installation docs recommend the standalone installer, and note t
 powershell -ExecutionPolicy Bypass -c "irm -useb https://pixi.sh/install.ps1 | iex"
 ```
 
-### Linux
+### Linux / macOS
 
 ```bash
 curl -fsSL https://pixi.sh/install.sh | bash
@@ -486,7 +496,7 @@ Astral's official docs recommend the standalone installer on both Windows and Li
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-### Linux
+### Linux / macOS
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
